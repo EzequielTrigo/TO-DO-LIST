@@ -1,10 +1,18 @@
 from django.http import HttpResponse
 from polls.models import Question, Choice
+from django.template import loader
+#def index(request):
+#    latest_question_list = Question.objects.order_by("-pub_date")[:5]
+#    output = ", ".join([q.question_text + " (id=" + str(q.id) + ")" for q in latest_question_list])
+#    return HttpResponse(output)
 
 def index(request):
     latest_question_list = Question.objects.order_by("-pub_date")[:5]
-    output = ", ".join([q.question_text + " (id=" + str(q.id) + ")" for q in latest_question_list])
-    return HttpResponse(output)
+    template = loader.get_template("polls/index.html")
+    context = {
+        "latest_question_list": latest_question_list,
+    }
+    return HttpResponse(template.render(context, request))
 
 def prueba(request):
     return HttpResponse("prueba")
