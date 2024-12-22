@@ -68,6 +68,14 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         """Return the last five published questions."""
         return Question.objects.order_by("-pub_date")[:5]
+    
+    def get_context_data(self, **kwargs):
+        # Obtén el contexto predeterminado de la clase padre
+        context = super().get_context_data(**kwargs)
+        # Agrega más datos al contexto
+        context["total_questions"] = Question.objects.count()
+        context["some_other_data"] = "Extra context example"
+        return context
 
 
 class DetailView(generic.DetailView):
