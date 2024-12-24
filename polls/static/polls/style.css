@@ -1,0 +1,10 @@
+li a {
+    color: rgb(0, 174, 255);
+}
+p {
+    color: rgb(0, 174, 255);
+}
+body {
+    background: rgb(240, 240, 240) url("images/background.png") no-repeat;
+    background-size: cover;
+}
