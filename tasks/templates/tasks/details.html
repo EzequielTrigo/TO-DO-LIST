@@ -1,0 +1,12 @@
+<body>
+    <legend><h1> {{ task.task_name }}</h1></legend>
+    <p> comentarios: {{ task.taks_comments }} </p>
+    
+    <p> {{ task.task_expected_finish_date }}</p>
+    {% if not task.task_finished %}
+        <p> task not finished </p>
+        <a href="{% url 'tasks:finish' task.id %}"> Finalizar tarea</a>
+    {% else %}
+        <p> task finished in {{ task.finished_date}} </p>
+    {% endif %}
+</body>
