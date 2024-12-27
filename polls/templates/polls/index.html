@@ -1,3 +1,6 @@
+{% load static %}
+</body>
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
@@ -9,3 +12,4 @@
 {% endif %}
 <p>Total Questions: {{ total_questions }}</p>
 <p>Funciona: {{ object_list }}</p>
+</body>
