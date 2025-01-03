@@ -1,0 +1,24 @@
+<body>
+   <form action="{% url 'tasks:created' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1> Task Creation </h1></legend>
+        <h3> Please complete the following blanks spaces to create a new Task: </h3>
+        {%if error_message%}<p><strong>{{ error_message }}</strong></p>{%endif%}
+        
+        <label for="task_name">Task name:</label>
+        <input type="text" id="task_name" name="task_name" maxlength="200" placeholder="Enter task name (max 200 chars)" required><br><br>
+        
+        <label for="comentarios">Task comments</label>
+        <input type="text" id="comentarios" name="comentarios" maxlength="20000" placeholder="Enter comments (max 20000 chars)"> required<br><br>
+    
+        <label for="task_start_date">Start Date:</label>
+        <input type="datetime-local" id="task_start_date" name="task_start_date" required><br><br>
+
+        <label for="task_expected_finish_date">Expected finish Date:</label>
+        <input type="datetime-local" id="task_expected_finish_date" name="task_expected_finish_date" required><br><br>
+    </fieldset>
+    <button type="submit">Submit</button>
+   </form>
+
+</body>
