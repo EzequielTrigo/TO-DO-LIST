@@ -1,11 +1,13 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from .models import Todo_task, MiExcepcion
 from django.utils import timezone
 import datetime
 from django.urls import reverse
+import time
 # Create your tests here.
-class TaskModelTests(TestCase):
 
+
+class TaskModelTests(TestCase):
     def test_is_task_that_will_start_in_future_finished(self):
         task=Todo_task(task_start_date=timezone.now()+datetime.timedelta(days=1))
         exceptionLock=False
@@ -52,3 +54,29 @@ class TaskIndexViewTests(TestCase):
         task2 = create_task("test2", timezone.now())
         response = self.client.get(reverse("tasks:index"))
         self.assertQuerySetEqual(response.context["latest_task_list"], [task2, task])
+
+class TaskDetailsViewTests(TestCase):
+
+    def test_details_not_finished(self):
+        task = create_task("test", timezone.now())
+        response = self.client.get(reverse("tasks:detail", args=(task.id,)))
+        self.assertIs(response.context["is_overtime"], False)
+
+    def test_details_finished(self):
+        task = create_task("test", timezone.now())
+        time.sleep(1)
+        task.task_finished=True
+        task.task_finished_date=timezone.now()
+        response = self.client.get(reverse("tasks:detail", args=(task.id,)))
+        self.assertIs(response.context["overtime"]<datetime.timedelta(days=0), True)
+        self.assertIs(response.context["is_overtime"], False)
+
+    def test_details_finished_with_overtime(self):
+        task = create_task("test", timezone.now()- datetime.timedelta(days=2))
+        task.task_finished=True
+        task.task_finished_date=timezone.now()
+        task.save()
+        response = self.client.get(reverse("tasks:detail", args=(task.id,)))
+        self.assertIs(response.context["overtime"]<datetime.timedelta(days=0), False)
+        self.assertIs(response.context["is_overtime"], True)
+        self.assertIs(response.context["task"].task_finished, True)

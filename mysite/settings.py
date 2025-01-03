@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+import sys
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-62a44r$%a0bm57#12@5120pfl3g#%-zd-td00i)ac2l)ltx!(f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-if DEBUG:
-    INSTALLED_APPS=[ "debug_toolbar"] + INSTALLED_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,8 +52,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if DEBUG:
-    MIDDLEWARE= ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
+if 'test' in sys.argv:  # Detecta si estás ejecutando tests
+    INSTALLED_APPS = [app for app in INSTALLED_APPS if app != 'debug_toolbar']
+    MIDDLEWARE = [mw for mw in MIDDLEWARE if mw != 'debug_toolbar.middleware.DebugToolbarMiddleware']
 
 ROOT_URLCONF = 'mysite.urls'
 
