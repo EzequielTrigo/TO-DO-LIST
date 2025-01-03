@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
+class MiExcepcion(Exception):
+    pass
 # Create your models here.
 class Todo_task(models.Model):
     task_name = models.CharField(max_length=200)
@@ -15,4 +17,7 @@ class Todo_task(models.Model):
         return self.task_name
     
     def task_not_finished_in_time(self):
-        return self.task_espected_finish_Date > timezone.now()
+        if self.task_finished:
+            return self.task_expected_finish_date < self.task_finished_date
+        else:
+            raise MiExcepcion("No terminó")
