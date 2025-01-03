@@ -46,3 +46,9 @@ class TaskIndexViewTests(TestCase):
         task_future = create_task("failed", timezone.now() + datetime.timedelta(days=1))
         response = self.client.get(reverse("tasks:index"))
         self.assertQuerySetEqual(response.context["latest_task_list"], [task])
+
+    def test_two_past_question(self):
+        task = create_task("test", timezone.now())
+        task2 = create_task("test2", timezone.now())
+        response = self.client.get(reverse("tasks:index"))
+        self.assertQuerySetEqual(response.context["latest_task_list"], [task2, task])
